@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#153b50">
+<title>Аварийна готовност — личен план</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{--navy:#153b50;--blue:#216b83;--pale:#e8f3f5;--bg:#eef2f5;--card:#fff;--ink:#17232c;--muted:#63737d;--line:#d6e0e5;--gold:#f0b342;--red:#a33b3b;--green:#23754e}
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+body{display:flex;flex-direction:column;overflow:hidden}
+header{background:linear-gradient(120deg,#153b50,#216b83);color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:74px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:43px;height:43px;border-radius:12px;background:#ffffff20;display:grid;place-items:center;font-size:25px}.brand h1{font-size:1.15rem;margin:0}.brand p{margin:2px 0 0;color:#d8e8ed;font-size:.82rem}.topstatus{font-size:.78rem;border:1px solid #ffffff55;border-radius:30px;padding:7px 10px;white-space:nowrap}.header-tools{display:flex;align-items:center;gap:8px;color:#fff}.header-tools label{font-size:.82rem;margin:0;white-space:nowrap}.header-tools input{width:76px;padding:8px;border-color:#ffffff66;background:#ffffff;color:var(--ink)}
+.app{display:flex;min-height:0;flex:1}.sidebar{width:218px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;gap:5px}
+.tab{width:100%;border:0;background:transparent;color:#40535e;text-align:left;padding:12px 13px;border-radius:11px;font:inherit;font-weight:650;cursor:pointer;display:flex;align-items:center;gap:10px}.tab .ico{width:24px;text-align:center;font-size:1.1rem}.tab.active{background:var(--pale);color:var(--navy)}.tab:hover{background:#f1f6f8}.sidebottom{margin-top:auto;border-top:1px solid var(--line);padding:12px 9px 0;color:var(--muted);font-size:.78rem;line-height:1.45}
+main{min-width:0;flex:1;overflow:auto;padding:20px}.page{display:none;max-width:1200px;margin:0 auto}.page.active{display:block}.pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}.pagehead h2{margin:0;color:var(--navy);font-size:1.55rem}.pagehead p{margin:5px 0 0;color:var(--muted);max-width:800px}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px;margin-bottom:14px;box-shadow:0 3px 10px #163b5208}.card h3{margin:0 0 12px;color:var(--navy);font-size:1.05rem}.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}.s12{grid-column:span 12}.s8{grid-column:span 8}.s7{grid-column:span 7}.s6{grid-column:span 6}.s5{grid-column:span 5}.s4{grid-column:span 4}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.field{margin-bottom:12px}label{display:block;font-size:.88rem;font-weight:650;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #c6d2d9;border-radius:9px;padding:10px 11px;background:#fff;color:var(--ink);font:inherit}textarea{min-height:78px;resize:vertical}.hint,.small{font-size:.82rem;color:var(--muted)}.hint{margin:0 0 12px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}.metric{background:#edf6f8;border:1px solid #d5e8ec;border-radius:11px;padding:12px}.metric strong{display:block;color:var(--navy);font-size:1.3rem}.metric span{font-size:.8rem;color:var(--muted)}button,.btn{border:0;border-radius:9px;padding:10px 13px;background:var(--blue);color:white;font:inherit;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none}button.secondary,.btn.secondary{background:#e9f0f3;color:var(--navy);border:1px solid var(--line)}button.danger{background:#f8e9e9;color:var(--red);border:1px solid #ebcaca}button:disabled{opacity:.55;cursor:not-allowed}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.notice{padding:11px 13px;border-radius:10px;background:#fff6e4;border:1px solid #f0d7a0;color:#664b15;font-size:.9rem;margin:10px 0}.notice.good{background:#e9f6ee;border-color:#c6e6d0;color:#215c3e}.checkgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.check{display:flex;align-items:flex-start;gap:9px;border:1px solid var(--line);border-radius:9px;padding:10px}.check input{width:17px;height:17px;margin-top:3px;flex-shrink:0}.check label{font-weight:500;margin:0}.item{border:1px solid var(--line);border-radius:10px;padding:11px;margin-top:8px}.item h4{margin:0 0 4px;color:var(--navy)}.item p{margin:4px 0;white-space:pre-wrap}.item button{margin-top:6px}.mapwrap{height:min(54vh,520px);min-height:320px;border:1px solid var(--line);border-radius:12px;overflow:hidden;position:relative}.maphelp{font-size:.82rem;color:var(--muted);margin:8px 0}.mapstatus{font-size:.86rem;padding:8px 10px;border-radius:8px;background:#eef5f7;margin-top:8px}.route-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.route-summary div{padding:10px;background:#f4f7f9;border-radius:9px}.route-summary strong{display:block;color:var(--navy)}.hidden{display:none!important}.empty{color:var(--muted);font-size:.9rem;padding:12px;border:1px dashed var(--line);border-radius:9px}
+footer{font-size:.76rem;color:var(--muted);padding:7px 18px;background:#f7f9fa;border-top:1px solid var(--line)}
+@media(max-width:800px){header{padding:10px 12px;min-height:64px}.header-tools{gap:5px}.header-tools label{font-size:.72rem}.header-tools input{width:62px;padding:7px}.topstatus{display:none}.app{flex-direction:column-reverse}.sidebar{width:100%;height:67px;flex-direction:row;overflow-x:auto;overflow-y:hidden;border-right:0;border-top:1px solid var(--line);padding:5px;gap:3px}.tab{min-width:76px;width:auto;flex-direction:column;gap:2px;text-align:center;padding:5px 9px;font-size:.7rem}.tab .ico{font-size:1.05rem}.sidebottom{display:none}main{padding:13px;flex:1}.pagehead h2{font-size:1.3rem}.s8,.s7,.s6,.s5,.s4{grid-column:span 12}.mapwrap{height:42vh;min-height:270px}.row3{grid-template-columns:1fr 1fr}.card{padding:14px}}
+@media(max-width:420px){.row,.row3,.metrics,.checkgrid,.route-summary{grid-template-columns:1fr}.brand h1{font-size:1rem}.brand p{font-size:.72rem}.metric strong{font-size:1.15rem}}
+@media print{body{height:auto;overflow:visible;display:block}.app{display:block}.sidebar,header .topstatus,footer,.actions,.no-print{display:none!important}header{background:#fff;color:#000}.page{display:block!important;max-width:none;page-break-after:always}main{overflow:visible;padding:0}.card{box-shadow:none;break-inside:avoid}.mapwrap{height:350px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="logo">＋</div><div><h1>Аварийна готовност</h1><p>Личен план за дома и евакуация с автомобил</p></div></div>
+ <div class="header-tools"><label for="globalDays">План за (дни)</label><input id="globalDays" type="number" min="1" max="365" value="3" aria-label="Продължителност на плана в дни"><div class="topstatus">🔒 Данните се пазят локално</div></div>
+</header>
+<div class="app">
+ <aside class="sidebar">
+  <button class="tab active" data-page="home"><span class="ico">⌂</span>Обобщение</button>
+  <button class="tab" data-page="supplies"><span class="ico">◉</span>Вода и храна</button>
+  <button class="tab" data-page="inventory"><span class="ico">📦</span>Нашите запаси</button>
+  <button class="tab" data-page="map"><span class="ico">⌖</span>Карта и маршрут</button>
+  <button class="tab" data-page="vehicle"><span class="ico">🚙</span>Автомобил</button>
+  <button class="tab" data-page="power"><span class="ico">🔋</span>Ток и батерии</button>
+  <button class="tab" data-page="seasonal"><span class="ico">🌦️</span>Сезонна готовност</button>
+  <button class="tab" data-page="people"><span class="ico">♙</span>Хора и контакти</button>
+  <button class="tab" data-page="kit"><span class="ico">☑</span>Комплект</button>
+  <button class="tab" data-page="backup"><span class="ico">⚙</span>Запазване</button>
+  <div class="sidebottom">Първо безопасността.<br>При непосредствена опасност: <b>112</b>.</div>
+ </aside>
+ <main>
+  <section class="page active" id="page-home">
+   <div class="pagehead"><div><h2>Обобщение</h2><p>Избери продължителност на плана и подготви необходимите запаси за избрания период.</p></div></div>
+   <div class="grid">
+    <div class="card s4"><h3>💧 Вода</h3><div class="metrics" style="grid-template-columns:1fr"><div class="metric"><strong id="homeWater">36 л</strong><span>Общо за зададените хора и дни</span></div></div><p class="small">Настрой количествата в „Вода и храна“.</p><button class="secondary" data-goto="supplies">Отвори калкулатора →</button></div>
+    <div class="card s4"><h3>🗺️ Евакуация</h3><p id="homeRoute" class="small">Добави начална точка и място за среща.</p><button class="secondary" data-goto="map">Отвори картата →</button></div>
+    <div class="card s4"><h3>🚙 Автомобил</h3><p id="homeVehicle" class="small">Добави данни за автомобила и провери оборудването.</p><button class="secondary" data-goto="vehicle">Подготви автомобила →</button></div>
+    <div class="card s12"><h3>Преди да се наложи да тръгнете</h3><div class="checkgrid" id="quickTips"></div><div class="notice">Маршрутите на картата изискват интернет. Ако няма връзка, използвай предварително записаните инструкции, офлайн карта и хартиена карта. Не тръгвай по маршрут, който властите са затворили.</div></div>
+   </div>
+  </section>
+
+  <section class="page" id="page-supplies">
+   <div class="pagehead"><div><h2>Вода и храна</h2><p>Изчисли запасите според броя хора и продължителността.</p></div></div>
+   <div class="grid">
+    <div class="card s5"><h3>Параметри</h3>
+     <div class="row"><div class="field"><label for="peopleCount">Брой хора</label><input id="peopleCount" type="number" min="1" max="50" value="2"></div><div class="field"><label for="daysCount">Дни</label><input id="daysCount" type="number" min="1" max="365" value="3"></div></div>
+     <div class="row"><div class="field"><label for="waterRate">Вода за пиене и храна (л/човек/ден)</label><input id="waterRate" type="number" min="1" max="20" step=".5" value="4"></div><div class="field"><label for="hygieneRate">Допълнително за хигиена (л/човек/ден)</label><input id="hygieneRate" type="number" min="0" max="20" step=".5" value="2"></div></div>
+     <div class="field"><label for="kcalRate">Енергия на човек дневно</label><select id="kcalRate"><option value="2000">2000 kcal</option><option value="2200" selected>2200 kcal</option><option value="2500">2500 kcal</option><option value="2800">2800 kcal</option></select></div>
+     <div class="notice">4 литра на човек дневно е ориентир за пиене и приготвяне на храна; нуждите варират. Водата за хигиена е отделно.</div>
+    </div>
+    <div class="card s7"><h3>Изчислени запаси</h3><div class="metrics"><div class="metric"><strong id="drinkTotal">24 л</strong><span>Питейна вода и храна</span></div><div class="metric"><strong id="allWater">36 л</strong><span>Общо с хигиената</span></div><div class="metric"><strong id="kcalTotal">13 200</strong><span>Общо kcal</span></div></div><h3>Примерен списък с храни</h3><div id="foodResults" class="checkgrid"></div><p class="small">Количествата са ориентировъчни, не гарантират конкретен калориен сбор. Избирай храни, които понасяте, и отчитай алергии, възраст и медицински нужди.</p></div>
+   </div>
+  </section>
+
+
+  <section class="page" id="page-inventory">
+   <div class="pagehead"><div><h2>Нашите запаси</h2><p>Записвай наличностите, сроковете на годност и колко още трябва да купиш.</p></div></div>
+   <div class="grid">
+    <div class="card s12"><div class="metrics"><div class="metric"><strong id="invCount">0</strong><span>Вида продукти</span></div><div class="metric"><strong id="invLow">0</strong><span>Нуждаят се от допълване</span></div><div class="metric"><strong id="invExpiry">0</strong><span>Скоро изтичащ срок</span></div></div></div>
+    <div class="card s5"><h3>＋ Добави продукт</h3>
+     <div class="field"><label for="invName">Продукт</label><input id="invName" placeholder="Напр. питейна вода, ориз, консерви"></div>
+     <div class="row"><div class="field"><label for="invCategory">Категория</label><select id="invCategory"><option>Вода и напитки</option><option>Храни</option><option>Аптечка и хигиена</option><option>Осветление и батерии</option><option>Инструменти и оборудване</option><option>Други</option></select></div><div class="field"><label for="invUnit">Мерна единица</label><select id="invUnit"><option value="бр.">Бройки</option><option value="кг">Килограми</option><option value="г">Грамове</option><option value="л">Литри</option></select></div></div>
+     <div class="row"><div class="field"><label for="invQty">Налично количество</label><input id="invQty" type="number" min="0" step="any" value="0"></div><div class="field"><label for="invTarget">Желано количество</label><input id="invTarget" type="number" min="0" step="any" value="1"></div></div>
+     <div class="field"><label for="invExpiryDate">Срок на годност (по желание)</label><input id="invExpiryDate" type="date"></div>
+     <div class="actions"><button id="invAdd">＋ Добави в запасите</button><button class="secondary" id="invClearForm" type="button">Изчисти полетата</button></div>
+     <p class="small">Използвай една и съща мерна единица за наличното и желаното количество. Например 2 кг налични и 5 кг желани.</p>
+    </div>
+    <div class="card s7"><div class="row"><div class="field"><label for="invFilter">Филтър</label><select id="invFilter"><option value="all">Всички продукти</option><option value="low">За допълване</option><option value="expiry">Скоро изтичащи / изтекли</option></select></div><div class="field"><label for="invSearch">Търси продукт</label><input id="invSearch" placeholder="Напиши име или категория"></div></div><h3>Списък на запасите</h3><div id="inventoryList"></div></div>
+    <div class="card s12"><h3>🛒 Списък за пазаруване</h3><p class="small">Автоматично се изчислява разликата между желаното и наличното количество.</p><div id="shoppingList"></div><h3 style="margin-top:22px">Пазаруване според плана</h3><p class="small">Ориентировъчна нужда за избрания брой хора и дни. Сравнява се с наличностите в „Нашите запаси“ по име, когато съвпадат.</p><div id="planShopping"></div><div class="actions"><button class="secondary" id="invPrintShopping">Печат на списъка</button><button class="secondary" id="invExportCsv">Изтегли CSV</button></div></div>
+   </div>
+  </section>
+
+  <section class="page" id="page-map">
+   <div class="pagehead"><div><h2>Карта и маршрут за евакуация</h2><p>Натисни върху картата, за да поставиш маркер, или потърси адрес. Можеш да зададеш дом, точка за среща и дестинация.</p></div></div>
+   <div class="grid">
+    <div class="card s4">
+     <h3>Точки и адреси</h3>
+     <div class="field"><label for="addressSearch">Търси място / адрес</label><input id="addressSearch" placeholder="Град, улица или ориентир"></div>
+     <div class="actions"><button id="searchAddress">Търси на картата</button><button class="secondary" id="setSearchPoint" disabled>Задай намереното място</button><button class="secondary" id="useMapClick">Постави маркер с клик</button></div>
+     <p class="hint">След търсене избери какво да зададеш на намереното място.</p>
+     <div class="field"><label for="markerType">Тип на точката</label><select id="markerType"><option value="home">Начална точка / дом</option><option value="meet">Точка за среща</option><option value="dest">Дестинация / безопасно място</option><option value="alt">Резервна точка за среща</option></select></div>
+     <div class="field"><label for="routeMode">Режим на маршрут</label><select id="routeMode"><option value="driving">С автомобил</option><option value="walking">Пеша</option></select></div>
+     <div class="actions"><button id="routeButton">Изчисли маршрут</button><button class="secondary" id="clearRoute">Изчисти маршрута</button></div>
+     <div id="mapStatus" class="mapstatus">Картата зарежда. Интернет е необходим за картографския слой и търсенето.</div>
+     <div class="route-summary"><div><strong id="routeDistance">—</strong><span class="small">Разстояние</span></div><div><strong id="routeDuration">—</strong><span class="small">Приблизително време</span></div></div>
+     <div class="field" style="margin-top:12px"><label for="routeNotes">Инструкции / ориентири</label><textarea id="routeNotes" placeholder="Основен маршрут, обходи, мостове, места за гориво..."></textarea></div>
+     <div class="field"><label for="meetWith">Среща с кого</label><input id="meetWith" placeholder="Име или роля на човека"></div>
+     <div class="field"><label for="meetTime">Уговорен час / правило за среща</label><input id="meetTime" placeholder="Напр. при прекъсване на връзката, в 18:00"></div>
+     <div class="actions"><button class="secondary" id="openOSM">Отвори района в OpenStreetMap</button><button class="secondary" id="openGoogle">Отвори в Google Maps</button></div>
+    </div>
+    <div class="card s8"><div id="map" class="mapwrap"></div><p class="maphelp">Използвай картата за планиране предварително. Маршрутът е ориентировъчен и може да не отчита затворени пътища, бедствия или ограничения в реално време.</p></div>
+   </div>
+   <div class="card">
+    <h3>Запазени маршрути</h3>
+    <p class="hint">Запиши често използвани или резервни маршрути. Те се пазят в този браузър и могат да се заредят отново на картата.</p>
+    <div class="row"><div class="field"><label for="savedRouteName">Име на маршрута</label><input id="savedRouteName" placeholder="Напр. Дом → безопасно място"></div><div class="field"><label for="savedRouteNotes">Бележка</label><input id="savedRouteNotes" placeholder="Резервен маршрут, спирки за гориво..."></div></div>
+    <div class="actions"><button id="saveRouteProfile">＋ Запази текущите точки</button></div>
+    <div id="savedRouteList"></div>
+   </div>
+  </section>
+
+  <section class="page" id="page-vehicle">
+   <div class="pagehead"><div><h2>Евакуация с автомобил</h2><p>Подготви автомобила и багажника, без да претоварваш колата или да пречиш на видимостта.</p></div></div>
+   <div class="grid">
+    <div class="card s5"><h3>Данни за автомобила</h3>
+     <div class="field"><label for="carModel">Автомобил / модел</label><input id="carModel" placeholder="Напр. Toyota RAV4 2.2 D-4D"></div>
+     <div class="row"><div class="field"><label for="fuelType">Гориво</label><select id="fuelType"><option>Дизел</option><option>Бензин</option><option>Бензин/LPG</option><option>Хибрид</option><option>Електрически</option><option>Друго</option></select></div><div class="field"><label for="tankSize">Резервоар (л)</label><input id="tankSize" type="number" min="0" value="60"></div></div>
+     <div class="row"><div class="field"><label for="consumption">Разход (л/100 км)</label><input id="consumption" type="number" min="0" step=".1" value="8"></div><div class="field"><label for="fuelNow">Гориво в момента (%)</label><input id="fuelNow" type="number" min="0" max="100" value="80"></div></div>
+     <div class="field"><label for="tripKm">Планирано разстояние (км)</label><input id="tripKm" type="number" min="0" value="250"></div>
+     <div class="row"><div class="field"><label for="vehiclePlate">Регистрационен номер (по желание)</label><input id="vehiclePlate" placeholder="Напр. Т0000АА"></div><div class="field"><label for="vehicleNotes">Бележки за автомобила</label><input id="vehicleNotes" placeholder="Гуми, сервиз, особености"></div></div>
+     <div class="metrics"><div class="metric"><strong id="fuelLitres">48 л</strong><span>Гориво в резервоара</span></div><div class="metric"><strong id="rangeKm">600 км</strong><span>Теоретичен пробег</span></div><div class="metric"><strong id="tripNeed">20 л</strong><span>За планирания път</span></div></div>
+     <div class="notice">Пробегът е приблизителен. При задръствания, студ, товар, офроуд или работа на място разходът се увеличава. Не чакай резервоарът да стане почти празен.</div>
+    </div>
+    <div class="card s12"><h3>Профил за дълъг път и евакуация</h3>
+     <div class="row3"><div class="field"><label for="reservePercent">Резерв за гориво (%)</label><input id="reservePercent" type="number" min="0" max="50" value="20"></div><div class="field"><label for="extraConsumption">Добавка за тежки условия (%)</label><input id="extraConsumption" type="number" min="0" max="100" value="25"></div><div class="field"><label for="fuelPrice">Цена на горивото (€/л)</label><input id="fuelPrice" type="number" min="0" step=".01" value="1.70"></div></div>
+     <div class="metrics"><div class="metric"><strong id="tripNeedWithBuffer">25 л</strong><span>Гориво с добавка за условията</span></div><div class="metric"><strong id="tripCost">42,50 €</strong><span>Ориентировъчна цена</span></div><div class="metric"><strong id="stopsEstimate">—</strong><span>Ориентир за зареждане</span></div></div>
+     <p class="small">Изчислението е ориентировъчно. Планирай зареждане преди да достигнеш резерва; не разчитай на теоретичния пробег при бедствие или задръстване.</p>
+    </div>
+    <div class="card s7"><h3>Оборудване за автомобила</h3><p class="hint">Отбележи какво е налично. Съобрази оборудването с местните правила, сезона и автомобила.</p><div id="carKit" class="checkgrid"></div></div>
+    <div class="card s12"><h3>План преди потегляне</h3><div id="carPrep" class="checkgrid"></div><div class="notice">Не използвай автомобил за преминаване през вода с неизвестна дълбочина, свлачище, пожар или блокиран участък. Не напускай асфалтовия път заобикаляйки официални блокади. При опасност следвай указанията на аварийните служби.</div></div>
+   </div>
+  </section>
+
+  <section class="page" id="page-people">
+   <div class="pagehead"><div><h2>Хора и контакти</h2><p>Запиши хората, с които трябва да се свържеш, и правилата за среща.</p></div></div>
+   <div class="grid">
+    <div class="card s6"><h3>Добави контакт</h3><div class="row"><div class="field"><label for="contactName">Име / връзка</label><input id="contactName" placeholder="Напр. близък човек"></div><div class="field"><label for="contactPhone">Телефон</label><input id="contactPhone" type="tel" placeholder="Телефон"></div></div><div class="field"><label for="contactRole">Роля / бележка</label><input id="contactRole" placeholder="Резервен контакт, съсед, лекар..."></div><button id="addContact">＋ Добави контакт</button><div id="contactList"></div></div>
+    <div class="card s6"><h3>Важни лични бележки</h3><div class="field"><label for="medical">Лекарства, алергии и медицински нужди</label><textarea id="medical" placeholder="Запиши само информацията, която е необходима при спешен случай."></textarea></div><div class="field"><label for="familyPlan">Семеен план</label><textarea id="familyPlan" placeholder="Кой взема децата, кой носи раницата, какво правите при липса на телефонна връзка..."></textarea></div><div class="notice">Не разчитай единствено на телефона си. Запиши ключовите номера и на хартия.</div></div>
+   </div>
+  </section>
+
+  <section class="page" id="page-kit">
+   <div class="pagehead"><div><h2>Контролен списък</h2><p>Провери домашния комплект и следи готовността му.</p></div></div>
+   <div class="card"><div class="metrics"><div class="metric"><strong id="checkedCount">0/0</strong><span>Отметнати позиции</span></div><div class="metric"><strong id="progressPercent">0%</strong><span>Готовност</span></div><div class="metric"><strong id="checkDate">—</strong><span>Последна проверка</span></div></div><div id="homeKit" class="checkgrid"></div><div class="actions"><button class="secondary" id="resetChecks">Изчисти отметките</button></div></div>
+  </section>
+
+  <section class="page" id="page-power">
+   <div class="pagehead"><div><h2>Ток и батерии</h2><p>Прецени приблизително колко време ще издържат акумулатори, Power Bank и други източници на енергия.</p></div></div>
+   <div class="grid">
+    <div class="card s6"><h3>Калкулатор за електроенергия</h3>
+     <div class="field"><label for="powerCapacity">Капацитет на батерията / станцията (Wh)</label><input id="powerCapacity" type="number" min="0" value="500"></div>
+     <div class="field"><label for="powerUsable">Използваем капацитет (%)</label><input id="powerUsable" type="number" min="1" max="100" value="85"></div>
+     <div class="field"><label for="powerLoad">Обща консумация на уредите (W)</label><input id="powerLoad" type="number" min="0" value="60"></div>
+     <div class="metrics"><div class="metric"><strong id="powerHours">7,1 ч</strong><span>Приблизително време</span></div><div class="metric"><strong id="powerDays">0,3 дни</strong><span>При непрекъсната работа</span></div><div class="metric"><strong id="powerEnergy">425 Wh</strong><span>Използваема енергия</span></div></div>
+     <p class="small">Реалното време зависи от загубите при преобразуване, температурата, възрастта на батерията и промяната в консумацията.</p>
+    </div>
+    <div class="card s6"><h3>Сметни няколко уреда</h3><p class="small">Добави мощността и часовете работа на ден. Калкулаторът ще събере дневната нужда.</p>
+     <div class="row"><div class="field"><label for="deviceName">Уред</label><input id="deviceName" placeholder="Напр. LED лампа"></div><div class="field"><label for="deviceWatts">Мощност (W)</label><input id="deviceWatts" type="number" min="0" value="5"></div></div>
+     <div class="row"><div class="field"><label for="deviceHours">Часове на ден</label><input id="deviceHours" type="number" min="0" max="24" step=".5" value="5"></div><div class="field"><label for="deviceQty">Брой уреди</label><input id="deviceQty" type="number" min="1" value="1"></div></div>
+     <div class="actions"><button id="addDevice">＋ Добави уред</button><button class="secondary" id="clearDevices">Изчисти списъка</button></div><div id="deviceList"></div>
+     <div class="notice"><b id="dailyEnergy">25 Wh/ден</b> — дневна нужда от енергия. За план от <span id="energyPlanDays">3</span> дни: <b id="totalEnergy">75 Wh</b>.</div>
+    </div>
+   </div>
+  </section>
+  <section class="page" id="page-seasonal">
+   <div class="pagehead"><div><h2>Сезонна готовност</h2><p>Избери сценарий и отбележи конкретните действия за дома и семейството.</p></div></div>
+   <div class="card"><div class="field"><label for="seasonType">Сценарий</label><select id="seasonType"><option value="winter">❄️ Зима / силен студ</option><option value="summer">☀️ Лято / горещини</option><option value="flood">🌊 Наводнение / проливни валежи</option><option value="outage">🔌 Продължително прекъсване на тока</option></select></div><div class="metrics"><div class="metric"><strong id="seasonDone">0/0</strong><span>Изпълнени задачи</span></div><div class="metric"><strong id="seasonPercent">0%</strong><span>Готовност за сценария</span></div></div><div id="seasonChecklist" class="checkgrid"></div><div class="actions"><button class="secondary" id="resetSeason">Изчисти отметките за този сценарий</button><button class="secondary" id="printSeason">Печат на списъка</button></div></div>
+   <div class="card" style="margin-top:16px"><h3>Важни правила</h3><ul><li>Следи предупрежденията и инструкциите на общината, пожарната и другите компетентни служби.</li><li>При наводнение не преминавай пеша или с автомобил през течаща вода; придвижи се към по-високо място, ако е безопасно.</li><li>При прекъсване на тока никога не използвай генератор, барбекю или горивен уред в затворено помещение.</li><li>При горещини пий вода, ограничи натоварването и провери възрастни хора, деца и домашни любимци.</li></ul></div>
+  </section>
+  <section class="page" id="page-backup">
+   <div class="pagehead"><div><h2>Запазване и настройки</h2><p>Данните се съхраняват локално в този браузър. Направи резервно копие.</p></div></div>
+   <div class="grid">
+    <div class="card s6"><h3>Резервно копие</h3><p>Изтегли JSON файл, за да възстановиш плана на друго устройство или след изчистване на браузъра.</p><div class="actions"><button id="saveJson">⬇ Изтегли резервно копие</button><label class="btn secondary" for="loadJson">⬆ Зареди резервно копие</label><input class="hidden" id="loadJson" type="file" accept=".json,application/json"></div><div class="actions"><button class="secondary" id="printPlan">Печат / Запази като PDF</button></div></div>
+    <div class="card s6"><h3>Изтриване на данни</h3><p>Изтрива запазения в този браузър план и всички въведени контакти и маршрути.</p><button class="danger" id="clearAll">Изтрий всички данни</button><div class="notice good" style="margin-top:16px">Приложението не изпраща въведените контакти към собствен сървър. Картографските услуги и търсенето използват външни услуги, когато се свързваш с интернет.</div></div>
+    <div class="card s12"><h3>Полезни правила</h3><ul><li>При непосредствена опасност се обади на 112.</li><li>Поддържай поне половин резервоар, ако районът е изложен на чести прекъсвания или бедствия.</li><li>Провери гуми, резервна гума/комплект за ремонт, течности, светлини и акумулатор.</li><li>Дръж документите, лекарствата, вода и фенер в купето, а не заровени под багажа.</li><li>Не претоварвай автомобила; закрепи тежките предмети ниско и сигурно.</li><li>Проверявай храната, водата и батериите на всеки 6 месеца.</li></ul></div>
+   </div>
+  </section>
+ </main>
+</div>
+<footer>Аварийна готовност • Картата и маршрутите изискват интернет. Планът е помощно средство, а не заместител на официалните инструкции.</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const $=id=>document.getElementById(id), STORE='emergency72h-pages-v2';
+const homeKitLabels=['Питейна вода за всички','Храна, която може да се яде без готвене','Ръчна отварачка за консерви','Аптечка и лични лекарства','Фенерчета / челник','Резервни батерии','Заредени Power Bank устройства и кабели','Радио на батерии или ръчно зареждане','Документи в водоустойчив плик','Пари в брой и резервни ключове','Топли дрехи и одеяла','Дъждобрани и здрави обувки','Мокри кърпички и тоалетна хартия','Чували за отпадъци','Дезинфектант за ръце','Свирка и работни ръкавици','Пожарогасител / пожарно одеяло','План за евакуация и резервен маршрут','Точки за среща, споделени с близките'];
+const carKitLabels=['Проверени гуми и резервна гума/ремонтен комплект','Крик и ключ за колела','Компресор или помпа и манометър','Кабели за подаване на ток или подходящ стартер','Теглично въже с подходящ товарен рейтинг','Светлоотразителна жилетка за всеки пътник','Предупредителен триъгълник според местните правила','Фенер и резервни батерии','Комплект за първа помощ','Пожарогасител, ако е приложим/изискуем','Работни ръкавици и защитни очила','Мултифункционален инструмент и основни инструменти','Вода и храна за всички пътници','Топли одеяла / спални чували','Дъждобрани и резервни дрехи','Хартиена карта и офлайн карта в телефона','Зарядни кабели и Power Bank','Стъргалка, четка и зимна течност (през зимата)','Пясък/тракшън дъски само ако са подходящи за автомобила','Резервни предпазители и крушки, ако са приложими','Малка лопата, подходяща за сезона','Пликове за отпадъци и мокри кърпички','Документи, застраховка и контакти на пътна помощ','Проверени нива на масло, охлаждаща и спирачна течност'];
+const prepLabels=['Провери официалните предупреждения и затворените пътища','Зареди гориво / батерия и планирай резервни спирки','Провери налягането и състоянието на гумите','Провери маслото, охлаждащата течност и светлините','Изтегли офлайн карта и запиши маршрута на хартия','Кажи на близък маршрута и очакваното време за пристигане','Закрепи багажа и остави свободна видимост','Дръж вода, аптечка, документи и фенер достъпни','Провери местата за среща и резервния маршрут'];
+const foodItems=[['Консерви с боб/леща',0.5,'кг'],['Консерви с риба',0.35,'кг'],['Консерви с месо',0.2,'кг'],['Готови зеленчуци',0.35,'кг'],['Сухари/крекери',0.2,'кг'],['Овесени ядки/мюсли',0.085,'кг'],['Ядки',0.085,'кг'],['Сушени плодове',0.07,'кг'],['Барчета',1.2,'бр.'],['UHT мляко',0.33,'л']];
+let contacts=[],checks={},carChecks={},prepChecks={},lastCheck='',savedRoutes=[],inventory=[],map=null,markers={},routeLayer=null,pendingLatLng=null,clickMode=false,geocodeResult=null;
+function fmt(v){return new Intl.NumberFormat('bg-BG',{maximumFractionDigits:1}).format(v)}
+function safeVal(id,def=0){const x=Number($(id).value);return Number.isFinite(x)?x:def}
+function calculate(){
+ const p=Math.max(1,Math.min(50,Math.floor(safeVal('peopleCount',2)))),d=Math.max(1,Math.min(365,Math.floor(safeVal('daysCount',3))));
+ const drink=p*d*Math.max(1,safeVal('waterRate',4)),all=drink+p*d*Math.max(0,safeVal('hygieneRate',2)),kcal=p*d*safeVal('kcalRate',2200);
+ $('drinkTotal').textContent=fmt(drink)+' л';$('allWater').textContent=fmt(all)+' л';$('kcalTotal').textContent=fmt(kcal);$('homeWater').textContent=fmt(all)+' л';
+ $('foodResults').innerHTML='';foodItems.forEach(([label,rate,unit])=>{const div=document.createElement('div');div.className='check';const inner=document.createElement('div'),b=document.createElement('b'),s=document.createElement('div');b.textContent=label;s.className='small';s.textContent=fmt(p*d*rate)+' '+unit+' приблизително';inner.append(b,s);div.append(inner);$('foodResults').append(div)});
+}
+function checklistRender(target,labels,obj,prefix,stats=false){
+ const box=$(target);box.innerHTML='';labels.forEach((label,i)=>{const div=document.createElement('div');div.className='check';const input=document.createElement('input');input.type='checkbox';input.id=prefix+i;input.checked=!!obj[i];input.addEventListener('change',()=>{obj[i]=input.checked;lastCheck=new Date().toLocaleDateString('bg-BG');if(stats)checkStats();save()});const l=document.createElement('label');l.htmlFor=prefix+i;l.textContent=label;div.append(input,l);box.append(div)});if(stats)checkStats();
+}
+function checkStats(){const total=homeKitLabels.length,done=homeKitLabels.filter((_,i)=>checks[i]).length;$('checkedCount').textContent=done+'/'+total;$('progressPercent').textContent=Math.round(done/total*100)+'%';$('checkDate').textContent=lastCheck||'—'}
+function renderContacts(){$('contactList').innerHTML='';if(!contacts.length){$('contactList').innerHTML='<div class="empty">Все още няма добавени контакти.</div>';return}contacts.forEach((c,i)=>{const d=document.createElement('div');d.className='item';const h=document.createElement('h4');h.textContent=c.name||'Контакт';const p=document.createElement('p');p.textContent=(c.phone||'Няма телефон')+(c.role?' • '+c.role:'');const b=document.createElement('button');b.className='danger';b.textContent='Премахни';b.onclick=()=>{contacts.splice(i,1);renderContacts();save()};d.append(h,p,b);$('contactList').append(d)})}
+function updateHome(){const home=markers.home?markers.home.getLatLng():null,meet=markers.meet?markers.meet.getLatLng():null,dest=markers.dest?markers.dest.getLatLng():null;const bits=[];if(home)bits.push('Начална точка записана');if(meet)bits.push('Среща записана');if(dest)bits.push('Дестинация записана');$('homeRoute').textContent=bits.length?bits.join(' • '):'Добави начална точка, място за среща или дестинация в картата.';const model=$('carModel').value.trim();$('homeVehicle').textContent=model?model+' • '+fmt(safeVal('fuelNow',0))+'% гориво':'Добави данни за автомобила и провери оборудването.'}
+function updateCar(){
+ const tank=Math.max(0,safeVal('tankSize',60)),cons=Math.max(0,safeVal('consumption',8)),pct=Math.max(0,Math.min(100,safeVal('fuelNow',80))),km=Math.max(0,safeVal('tripKm',250)),litres=tank*pct/100;
+ $('fuelLitres').textContent=fmt(litres)+' л';$('rangeKm').textContent=cons>0?fmt(litres/cons*100)+' км':'—';$('tripNeed').textContent=fmt(km*cons/100)+' л';
+ const extra=Math.max(0,safeVal('extraConsumption',25)),reserve=Math.max(0,Math.min(50,safeVal('reservePercent',20))),price=Math.max(0,safeVal('fuelPrice',1.7));
+ const need=km*cons/100*(1+extra/100),usable=litres-tank*reserve/100;
+ $('tripNeedWithBuffer').textContent=fmt(need)+' л';$('tripCost').textContent=fmt(need*price)+' €';
+ const neededStops=need>Math.max(0,usable)?Math.max(1,Math.ceil((need-Math.max(0,usable))/Math.max(1,tank*(1-reserve/100)))):0;
+ $('stopsEstimate').textContent=neededStops===0?'Не се очаква':neededStops+'+';
+ updateHome();
+}
+
+function unitText(unit){return unit||'бр.'}
+function dateStatus(date){if(!date)return '';const today=new Date();today.setHours(0,0,0,0);const exp=new Date(date+'T00:00:00');const diff=Math.ceil((exp-today)/86400000);if(diff<0)return 'Изтекъл срок';if(diff<=30)return diff===0?'Изтича днес':'Остават '+diff+' дни';return ''}
+function renderInventory(){
+ const list=$('inventoryList'),shop=$('shoppingList');list.innerHTML='';shop.innerHTML='';const filter=$('invFilter')?.value||'all',q=($('invSearch')?.value||'').trim().toLocaleLowerCase('bg-BG');
+ const low=inventory.filter(x=>Number(x.target)>Number(x.qty)),exp=inventory.filter(x=>x.expiry&&dateStatus(x.expiry));
+ $('invCount').textContent=inventory.length;$('invLow').textContent=low.length;$('invExpiry').textContent=exp.length;
+ const shown=inventory.filter(x=>{const isLow=Number(x.target)>Number(x.qty),isExp=!!(x.expiry&&dateStatus(x.expiry));return (filter==='all'||(filter==='low'&&isLow)||(filter==='expiry'&&isExp))&&(!q||(x.name+' '+x.category).toLocaleLowerCase('bg-BG').includes(q))});
+ if(!shown.length)list.innerHTML='<div class="empty">Няма продукти за показване. Добави първия продукт от формата.</div>';
+ shown.forEach(x=>{const d=document.createElement('div');d.className='item';const h=document.createElement('h4');h.textContent=x.name;const p=document.createElement('p');p.textContent=x.category+' • Налично: '+fmt(Number(x.qty)||0)+' '+unitText(x.unit)+' • Цел: '+fmt(Number(x.target)||0)+' '+unitText(x.unit);d.append(h,p);if(Number(x.target)>Number(x.qty)){const need=document.createElement('p');need.className='small';need.textContent='За купуване: '+fmt(Number(x.target)-Number(x.qty))+' '+unitText(x.unit);d.append(need)}if(x.expiry){const e=document.createElement('p');e.className='small';e.textContent='Срок: '+x.expiry+(dateStatus(x.expiry)?' • '+dateStatus(x.expiry):'');d.append(e)}
+ const row=document.createElement('div');row.className='row';const qwrap=document.createElement('div');qwrap.className='field';const lab=document.createElement('label');lab.textContent='Промени наличността';const inp=document.createElement('input');inp.type='number';inp.min='0';inp.step='any';inp.value=x.qty;inp.setAttribute('aria-label','Налично количество '+x.name);inp.addEventListener('change',()=>{x.qty=Math.max(0,Number(inp.value)||0);renderInventory();save()});qwrap.append(lab,inp);const buttons=document.createElement('div');buttons.className='actions';const plus=document.createElement('button');plus.className='secondary';plus.textContent='+1 '+unitText(x.unit);plus.onclick=()=>{x.qty=(Number(x.qty)||0)+1;renderInventory();save()};const del=document.createElement('button');del.className='danger';del.textContent='Премахни';del.onclick=()=>{if(confirm('Да премахна ли „'+x.name+'“ от запасите?')){inventory=inventory.filter(y=>y.id!==x.id);renderInventory();save()}};buttons.append(plus,del);row.append(qwrap,buttons);d.append(row);list.append(d)});
+ if(!low.length)shop.innerHTML='<div class="notice good">Всички записани продукти покриват зададените желани количества.</div>';else low.forEach(x=>{const d=document.createElement('div');d.className='check';const t=document.createElement('div');const b=document.createElement('b');b.textContent=x.name;const s=document.createElement('div');s.className='small';s.textContent='Купи още '+fmt(Number(x.target)-Number(x.qty))+' '+unitText(x.unit)+' ('+x.category+')';t.append(b,s);d.append(t);shop.append(d)});
+}
+$('invAdd').onclick=()=>{const name=$('invName').value.trim();if(!name){alert('Въведи име на продукта.');$('invName').focus();return}const unit=$('invUnit').value;inventory.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),name,category:$('invCategory').value,unit,qty:Math.max(0,Number($('invQty').value)||0),target:Math.max(0,Number($('invTarget').value)||0),expiry:$('invExpiryDate').value||''});['invName','invExpiryDate'].forEach(id=>$(id).value='');$('invQty').value='0';$('invTarget').value='1';renderInventory();save()};
+$('invClearForm').onclick=()=>{['invName','invExpiryDate'].forEach(id=>$(id).value='');$('invQty').value='0';$('invTarget').value='1'};
+$('invFilter').addEventListener('change',renderInventory);$('invSearch').addEventListener('input',renderInventory);
+$('invPrintShopping').onclick=()=>{const rows=inventory.filter(x=>Number(x.target)>Number(x.qty));const w=window.open('','_blank');if(!w){alert('Разреши изскачащия прозорец, за да отпечаташ списъка.');return}w.document.write('<!doctype html><html lang="bg"><meta charset="utf-8"><title>Списък за пазаруване</title><h1>Списък за пазаруване</h1><ul>'+rows.map(x=>'<li>'+escapeHtml(x.name)+': '+fmt(Number(x.target)-Number(x.qty))+' '+escapeHtml(unitText(x.unit))+'</li>').join('')+'</ul><script>window.onload=()=>window.print()<\/script></html>');w.document.close()};
+function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+$('invExportCsv').onclick=()=>{const rows=[['Продукт','Категория','Налично','Желано','Мерна единица','За купуване','Срок на годност'],...inventory.map(x=>[x.name,x.category,x.qty,x.target,x.unit,Math.max(0,Number(x.target)-Number(x.qty)),x.expiry||''])];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='nashite-zapasi.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+
+function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.page===name));if(name==='map'&&map){setTimeout(()=>map.invalidateSize(),120)}}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>showPage(t.dataset.page)));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.goto)));
+$('globalDays').addEventListener('input',()=>{const d=Math.max(1,Math.min(365,Math.floor(Number($('globalDays').value)||1)));$('daysCount').value=d;calculate();save()});
+$('daysCount').addEventListener('input',()=>{const d=Math.max(1,Math.min(365,Math.floor(Number($('daysCount').value)||1)));$('globalDays').value=d;calculate();save()});
+['peopleCount','waterRate','hygieneRate','kcalRate'].forEach(id=>$(id).addEventListener('input',()=>{calculate();save()}));
+['carModel','tankSize','consumption','fuelNow','tripKm','vehiclePlate','vehicleNotes','reservePercent','extraConsumption','fuelPrice'].forEach(id=>$(id).addEventListener('input',()=>{updateCar();save()}));
+['routeNotes','meetWith','meetTime','medical','familyPlan'].forEach(id=>$(id).addEventListener('input',save));
+$('addContact').onclick=()=>{const name=$('contactName').value.trim(),phone=$('contactPhone').value.trim(),role=$('contactRole').value.trim();if(!name&&!phone){alert('Въведи поне име или телефон.');return}contacts.push({name,phone,role});['contactName','contactPhone','contactRole'].forEach(id=>$(id).value='');renderContacts();save()};
+$('resetChecks').onclick=()=>{if(confirm('Да изчистя ли отметките от домашния комплект?')){checks={};lastCheck=new Date().toLocaleDateString('bg-BG');checklistRender('homeKit',homeKitLabels,checks,'hk',true);save()}};
+function state(){const fields={};document.querySelectorAll('input[id],select[id],textarea[id]').forEach(el=>{if(!['loadJson','addressSearch','markerType'].includes(el.id))fields[el.id]=el.value});const points={};Object.keys(markers).forEach(k=>{if(markers[k]){const ll=markers[k].getLatLng();points[k]={lat:ll.lat,lng:ll.lng,title:markers[k].options.title||k}}});return {version:4,fields,contacts,checks,carChecks,prepChecks,lastCheck,points,inventory,seasonChecks,devices}}
+function save(){try{localStorage.setItem(STORE,JSON.stringify(state()))}catch(e){}}
+$('saveJson').onclick=()=>{const blob=new Blob([JSON.stringify(state(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='avaren-plan.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('loadJson').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const s=JSON.parse(await f.text());if(!s.fields)throw 0;if(confirm('Зареждането ще замени текущия план. Продължавам ли?')){loadState(s);}}catch(err){alert('Файлът не е валидно резервно копие от приложението.')}e.target.value=''};
+$('printPlan').onclick=()=>{document.querySelectorAll('.page').forEach(p=>p.classList.add('print-visible'));window.print()};
+$('clearAll').onclick=()=>{if(confirm('Сигурен ли си? Това ще изтрие всички данни от този браузър.')){localStorage.removeItem(STORE);location.reload()}};
+function loadState(s){
+ Object.entries(s.fields||{}).forEach(([id,v])=>{if($(id)&&!['loadJson'].includes(id))$(id).value=v});
+ if($('globalDays'))$('globalDays').value=Math.max(1,Math.min(365,Math.floor(Number($('daysCount').value)||3)));
+ contacts=Array.isArray(s.contacts)?s.contacts:[];checks=s.checks||{};carChecks=s.carChecks||{};prepChecks=s.prepChecks||{};lastCheck=s.lastCheck||'';savedRoutes=Array.isArray(s.savedRoutes)?s.savedRoutes:[];inventory=Array.isArray(s.inventory)?s.inventory:[];seasonChecks=s.seasonChecks||{};devices=Array.isArray(s.devices)?s.devices:[];
+ calculate();renderContacts();renderInventory();renderSavedRoutes();checklistRender('homeKit',homeKitLabels,checks,'hk',true);checklistRender('carKit',carKitLabels,carChecks,'ck',false);checklistRender('carPrep',prepLabels,prepChecks,'cp',false);updateCar();if($('seasonType'))renderSeason();if($('deviceList'))renderDevices();if($('planShopping'))renderPlanShopping();
+ if(s.points&&map){Object.entries(s.points).forEach(([k,v])=>setPoint(k,v.lat,v.lng,v.title,false));}
+ if(map&&markers.home&&markers.dest)makeRoute(false);save();
+}
+function setStatus(t){$('mapStatus').textContent=t}
+function renderSavedRoutes(){
+ const box=$('savedRouteList');if(!box)return;box.innerHTML='';
+ if(!savedRoutes.length){box.innerHTML='<div class="empty">Няма запазени маршрути.</div>';return}
+ savedRoutes.forEach((r,i)=>{
+  const d=document.createElement('div');d.className='item';
+  const h=document.createElement('h4');h.textContent=r.name||('Маршрут '+(i+1));
+  const p=document.createElement('p');p.textContent=(r.notes||'Без бележка')+(r.points?.home&&r.points?.dest?` • ${distanceApprox(r.points.home,r.points.dest)} км по права линия`:'');
+  const load=document.createElement('button');load.textContent='Зареди на картата';load.onclick=()=>{if(!map){showPage('map');return}Object.entries(r.points||{}).forEach(([k,v])=>setPoint(k,v.lat,v.lng,v.title,false));if(r.routeNotes||r.notes)$('routeNotes').value=r.routeNotes||r.notes;if(r.meetWith)$('meetWith').value=r.meetWith;if(r.meetTime)$('meetTime').value=r.meetTime;showPage('map');if(markers.home&&markers.dest)makeRoute(false);map.invalidateSize();save()};
+  const del=document.createElement('button');del.className='danger';del.textContent='Изтрий';del.onclick=()=>{savedRoutes.splice(i,1);renderSavedRoutes();save()};
+  d.append(h,p,load,document.createTextNode(' '),del);box.append(d)
+ })
+}
+function distanceApprox(a,b){const rad=x=>x*Math.PI/180;const dLat=rad(b.lat-a.lat),dLon=rad(b.lng-a.lng),x=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLon/2)**2;return fmt(6371*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x)))}
+$('saveRouteProfile').onclick=()=>{
+ const points={};Object.keys(markers).forEach(k=>{if(markers[k]){const ll=markers[k].getLatLng();points[k]={lat:ll.lat,lng:ll.lng,title:markers[k].options.title||typeLabel(k)}}});
+ if(!points.home||!points.dest){alert('Първо постави начална точка и дестинация на картата.');return}
+ const name=$('savedRouteName').value.trim()||('Маршрут '+(savedRoutes.length+1));
+ savedRoutes.push({name,notes:$('savedRouteNotes').value.trim(),points,routeNotes:$('routeNotes').value,meetWith:$('meetWith').value,meetTime:$('meetTime').value,mode:$('routeMode').value,created:new Date().toISOString()});
+ renderSavedRoutes();save();alert('Маршрутът е запазен в този браузър.');
+};
+function initMap(){
+ if(!window.L){setStatus('Картата не се зареди. Провери интернет връзката. Ползвай бутоните за външна карта.');return}
+ map=L.map('map').setView([42.7,25.5],7);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
+ map.on('click',e=>{if(!clickMode)return;const type=$('markerType').value;setPoint(type,e.latlng.lat,e.latlng.lng,typeLabel(type));clickMode=false;$('useMapClick').textContent='Постави маркер с клик';setStatus(typeLabel(type)+' е поставена.');save()});
+ setStatus('Картата е готова. Натисни „Постави маркер с клик“, после избери точка на картата.');
+}
+function typeLabel(t){return ({home:'Начална точка / дом',meet:'Точка за среща',dest:'Дестинация',alt:'Резервна точка за среща'})[t]||t}
+function setPoint(type,lat,lng,title,zoom=true){
+ if(!map)return;const ll=L.latLng(lat,lng);if(markers[type])map.removeLayer(markers[type]);
+ const colors={home:'#2267a5',meet:'#23824b',dest:'#b13d3d',alt:'#b27a15'};
+ const icon=L.divIcon({className:'',html:`<div style="background:${colors[type]||'#216b83'};color:white;border:2px solid white;border-radius:50% 50% 50% 0;transform:rotate(-45deg);width:27px;height:27px;box-shadow:0 1px 5px #3338"><span style="display:block;transform:rotate(45deg);text-align:center;font-size:14px;line-height:23px">●</span></div>`,iconSize:[27,27],iconAnchor:[13,27]});
+ markers[type]=L.marker(ll,{icon,title:title||typeLabel(type)}).addTo(map).bindPopup('<b>'+typeLabel(type)+'</b><br>'+lat.toFixed(5)+', '+lng.toFixed(5));
+ if(zoom)map.setView(ll,14);updateHome();save();
+}
+$('useMapClick').onclick=()=>{clickMode=!clickMode;$('useMapClick').textContent=clickMode?'Сега избери място на картата':'Постави маркер с клик';setStatus(clickMode?'Натисни желаното място на картата.':'Режимът за поставяне на маркер е изключен.')};
+$('searchAddress').onclick=async()=>{const q=$('addressSearch').value.trim();if(!q){setStatus('Въведи адрес или място за търсене.');return}setStatus('Търся адрес…');try{const res=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q='+encodeURIComponent(q));const data=await res.json();if(!data.length){setStatus('Не е намерено място. Опитай с по-пълен адрес.');return}const v=data[0];geocodeResult={lat:Number(v.lat),lng:Number(v.lon),name:v.display_name};map.setView([v.lat,v.lon],15);pendingLatLng=[Number(v.lat),Number(v.lon)];$('setSearchPoint').disabled=false;setStatus('Намерено: '+v.display_name+'. Натисни „Задай намереното място“, за да запишеш точката.');}catch(e){setStatus('Търсенето не е достъпно. Провери интернет връзката или постави маркер ръчно.') }};
+$('setSearchPoint').onclick=()=>{if(!geocodeResult){setStatus('Първо потърси адрес.');return}const type=$('markerType').value;setPoint(type,geocodeResult.lat,geocodeResult.lng,geocodeResult.name);$('setSearchPoint').disabled=true;setStatus(typeLabel(type)+' е записана: '+geocodeResult.name);geocodeResult=null;pendingLatLng=null};
+$('addressSearch').addEventListener('keydown',e=>{if(e.key==='Enter')$('searchAddress').click()});
+$('routeButton').onclick=()=>makeRoute(true);
+$('clearRoute').onclick=()=>{if(routeLayer){map.removeLayer(routeLayer);routeLayer=null}markers.meet&&map.removeLayer(markers.meet);delete markers.meet;markers.alt&&map.removeLayer(markers.alt);delete markers.alt;$('routeDistance').textContent='—';$('routeDuration').textContent='—';setStatus('Маршрутът и точките за среща са изчистени.');updateHome();save()};
+async function makeRoute(showErrors=true){
+ if(!map||!markers.home||!markers.dest){if(showErrors)setStatus('Постави начална точка (дом) и дестинация, за да се изчисли маршрутът.');return}
+ const a=markers.home.getLatLng(),b=markers.dest.getLatLng(),mode=$('routeMode').value;setStatus('Изчислявам маршрут…');
+ const service=mode==='walking'?'https://router.project-osrm.org/route/v1/foot/':'https://router.project-osrm.org/route/v1/driving/';
+ try{
+  const r=await fetch(service+a.lng+','+a.lat+';'+b.lng+','+b.lat+'?overview=full&geometries=geojson&steps=true');const data=await r.json();
+  if(data.code!=='Ok'||!data.routes||!data.routes.length)throw Error('no route');
+  const route=data.routes[0];if(routeLayer)map.removeLayer(routeLayer);routeLayer=L.geoJSON(route.geometry,{style:{color:mode==='walking'?'#21834b':'#216bba',weight:5,opacity:.85}}).addTo(map);map.fitBounds(routeLayer.getBounds(),{padding:[20,20]});
+  $('routeDistance').textContent=fmt(route.distance/1000)+' км';$('routeDuration').textContent=Math.round(route.duration/60)+' мин';setStatus('Маршрутът е изчислен онлайн. Провери реалните условия и затварянията преди тръгване.');save();
+ }catch(e){if(routeLayer){map.removeLayer(routeLayer);routeLayer=null}L.polyline([a,b],{color:'#b13d3d',dashArray:'8 8',weight:4}).addTo(map);setStatus('Не успях да изчисля пътен маршрут онлайн. Показана е само права линия, не реален път. Провери интернет или отвори външна карта.');$('routeDistance').textContent='—';$('routeDuration').textContent='—';}
+}
+$('openOSM').onclick=()=>{const p=markers.home?markers.home.getLatLng():map?.getCenter();if(p)window.open('https://www.openstreetmap.org/#map=12/'+p.lat+'/'+p.lng,'_blank','noopener')};
+$('openGoogle').onclick=()=>{const a=markers.home?.getLatLng(),b=markers.dest?.getLatLng();let url='https://www.google.com/maps/dir/';if(a&&b)url+=a.lat+','+a.lng+'/'+b.lat+','+b.lng;else if(a)url+='?api=1&query='+a.lat+','+a.lng;else if(map){const p=map.getCenter();url+='?api=1&query='+p.lat+','+p.lng}window.open(url,'_blank','noopener')};
+const seasonTasks={
+ winter:['Провери отоплението и безопасността му; осигури резервни одеяла и топли дрехи.','Подготви вода и храна, които не изискват готвене.','Провери уплътненията на прозорците и защити тръби от замръзване, когато е приложимо.','Зареди фенери, радио, телефони и външни батерии.','Подготви сол/подходящ материал против хлъзгане, лопата и зимно оборудване за автомобила.','Провери зимните гуми, антифриза, течността за чистачки и акумулатора.','Определи как ще проверявате съседи или близки, които може да имат нужда от помощ.'],
+ summer:['Осигури достатъчно питейна вода и начин за поддържане на храната безопасна.','Подготви сянка, шапки и леки дрехи; провери охлаждането на дома.','Планирай дейностите навън в по-хладните часове.','Провери възрастни хора, деца и домашни любимци при горещини.','Подготви слънцезащита и аптечка.','Провери автомобила, охлаждащата система и налягането на гумите.','При риск от пожар поддържай свободни изходи и следи официалните предупреждения.'],
+ flood:['Знай кои райони са изложени на наводнение и определи безопасно място на по-високо.','Постави документи, лекарства и електроника във водоустойчиви торби.','Подготви евакуационна чанта и обувки, подходящи за мокри условия.','Не паркирай и не складирай важни вещи в ниски места, ако има риск.','Знай как безопасно да изключиш ток/газ само ако няма опасност да достигнеш таблото.','Запиши алтернативен маршрут и място за среща извън рисковата зона.','Не преминавай през наводнени пътища или течаща вода; следвай указанията на службите.'],
+ outage:['Зареди Power Bank, радио, фенери и акумулаторна станция; провери резервни батерии.','Подготви питейна вода и храна, която не изисква охлаждане или готвене.','Запази важни телефонни номера и инструкции на хартия.','Планирай безопасно отопление/охлаждане без въглероден оксид и пожарен риск.','Дръж хладилника и фризера затворени; прецени безопасността на храната след възстановяване.','Използвай генератор само навън, далеч от прозорци и врати; никога в жилище/гараж.','Провери нуждите от електрозахранване на медицински устройства и имай резервен план.','Изключи чувствителните уреди от контакта при възможни колебания на напрежението.']
+};
+let seasonChecks={},devices=[];
+function calcPower(){const cap=Math.max(0,safeVal('powerCapacity',0)),usable=Math.max(1,Math.min(100,safeVal('powerUsable',85)))/100,load=Math.max(0,safeVal('powerLoad',0)),wh=cap*usable,h=load>0?wh/load:0;$('powerEnergy').textContent=fmt(wh)+' Wh';$('powerHours').textContent=load>0?fmt(h)+' ч':'—';$('powerDays').textContent=load>0?fmt(h/24)+' дни':'—';const daily=devices.reduce((a,d)=>a+d.watts*d.hours*d.qty,0),days=Math.max(1,Math.min(365,Math.floor(safeVal('globalDays',3))));$('dailyEnergy').textContent=fmt(daily)+' Wh/ден';$('energyPlanDays').textContent=days;$('totalEnergy').textContent=fmt(daily*days)+' Wh';}
+function renderDevices(){const box=$('deviceList');box.innerHTML='';if(!devices.length){box.innerHTML='<div class="empty">Добави уред, за да изчислиш дневната консумация.</div>';calcPower();return}devices.forEach((d,i)=>{const el=document.createElement('div');el.className='item';const title=document.createElement('b');title.textContent=d.name+' — '+fmt(d.watts*d.hours*d.qty)+' Wh/ден';const desc=document.createElement('p');desc.className='small';desc.textContent=d.watts+' W × '+d.hours+' ч × '+d.qty+' бр.';const btn=document.createElement('button');btn.className='danger';btn.textContent='Премахни';btn.onclick=()=>{devices.splice(i,1);renderDevices();save()};el.append(title,desc,btn);box.append(el)});calcPower()}
+function renderSeason(){const key=$('seasonType').value,tasks=seasonTasks[key],saved=seasonChecks[key]||{};const box=$('seasonChecklist');box.innerHTML='';tasks.forEach((t,i)=>{const d=document.createElement('div');d.className='check';const cb=document.createElement('input');cb.type='checkbox';cb.checked=!!saved[i];cb.id='season_'+key+'_'+i;cb.onchange=()=>{seasonChecks[key]=seasonChecks[key]||{};seasonChecks[key][i]=cb.checked;updateSeasonStats();save()};const label=document.createElement('label');label.htmlFor=cb.id;label.textContent=t;d.append(cb,label);box.append(d)});updateSeasonStats()}
+function updateSeasonStats(){const tasks=seasonTasks[$('seasonType').value],c=seasonChecks[$('seasonType').value]||{},done=tasks.filter((_,i)=>c[i]).length;$('seasonDone').textContent=done+'/'+tasks.length;$('seasonPercent').textContent=Math.round(done/tasks.length*100)+'%'}
+function renderPlanShopping(){const p=Math.max(1,Math.floor(safeVal('peopleCount',2))),d=Math.max(1,Math.floor(safeVal('daysCount',3)));const targets=[['Питейна вода',p*d*Math.max(1,safeVal('waterRate',4)),'л'],['Вода за хигиена',p*d*Math.max(0,safeVal('hygieneRate',2)),'л'],...foodItems.map(([name,rate,unit])=>[name,p*d*rate,unit])];const norm=x=>String(x).toLocaleLowerCase('bg-BG').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();const rows=targets.map(([name,target,unit])=>{const inv=inventory.filter(x=>norm(x.name)===norm(name)&&x.unit===unit).reduce((a,x)=>a+Number(x.qty||0),0);return {name,target,unit,inv,need:Math.max(0,target-inv)}});$('planShopping').innerHTML=rows.map(r=>'<div class="item"><b>'+escapeHtml(r.name)+'</b><p class="small">Нужни: '+fmt(r.target)+' '+r.unit+' • Налични: '+fmt(r.inv)+' '+r.unit+' • <b>За набавяне: '+fmt(r.need)+' '+r.unit+'</b></p></div>').join('');}
+function setup(){
+ checklistRender('homeKit',homeKitLabels,checks,'hk',true);checklistRender('carKit',carKitLabels,carChecks,'ck',false);checklistRender('carPrep',prepLabels,prepChecks,'cp',false);
+ const tips=['Провери официалните предупреждения и затворените пътища.','Определи две места за среща и сподели плана.','Зареди телефони, външни батерии и радио.','Дръж документите и лекарствата достъпни.'];
+ $('quickTips').innerHTML='';tips.forEach(t=>{const d=document.createElement('div');d.className='check';const s=document.createElement('span');s.textContent='✓';const l=document.createElement('label');l.textContent=t;d.append(s,l);$('quickTips').append(d)});
+ calculate();renderContacts();renderInventory();renderSavedRoutes();updateCar();initMap();
+ try{const saved=localStorage.getItem(STORE);if(saved)loadState(JSON.parse(saved))}catch(e){}
+}
+$('globalDays').addEventListener('input',()=>{const v=Math.max(1,Math.min(365,Math.floor(safeVal('globalDays',3))));$('daysCount').value=v;calculate();renderPlanShopping();calcPower();save()});
+['peopleCount','daysCount','waterRate','hygieneRate','kcalRate'].forEach(id=>$(id).addEventListener('input',()=>{calculate();renderPlanShopping();save()}));
+['powerCapacity','powerUsable','powerLoad'].forEach(id=>$(id).addEventListener('input',calcPower));
+$('addDevice').onclick=()=>{const watts=Math.max(0,safeVal('deviceWatts',0)),hours=Math.max(0,Math.min(24,safeVal('deviceHours',0))),qty=Math.max(1,Math.floor(safeVal('deviceQty',1))),name=$('deviceName').value.trim()||'Уред';devices.push({name,watts,hours,qty});$('deviceName').value='';renderDevices();save()};$('clearDevices').onclick=()=>{devices=[];renderDevices();save()};
+$('seasonType').onchange=renderSeason;$('resetSeason').onclick=()=>{seasonChecks[$('seasonType').value]={};renderSeason();save()};$('printSeason').onclick=()=>window.print();
+const oldRenderInventory=renderInventory;renderInventory=function(){oldRenderInventory();renderPlanShopping()};
+setup();renderDevices();renderSeason();renderPlanShopping();calcPower();
+</script>
+</body>
+</html>
