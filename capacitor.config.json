@@ -1,0 +1,9 @@
+{
+  "appId": "bg.avariynagotovnost.app",
+  "appName": "Аварийна готовност",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}
